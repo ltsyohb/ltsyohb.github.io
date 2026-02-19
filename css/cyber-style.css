@@ -1,16 +1,16 @@
-/* 1. 完全匹配原图的深色背景 */
+/* 1. 完全匹配原图的深色背景 (已修复滚动问题) */
 body {
     margin: 0;
-    overflow: hidden;
+    /* overflow: hidden;  <-- 删除了这一行，恢复滚动！ */
     background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
     font-family: 'Courier New', monospace;
     color: #fff;
-    height: 100vh;
+    min-height: 100vh; /* 改为最小高度，允许内容撑开 */
 }
 
 /* 2. 人物剪影（完全匹配原图姿态） */
 .character {
-    position: absolute;
+    position: fixed; /* 改为 fixed，让人物固定在屏幕底部，不随滚动移动 */
     left: 50%;
     bottom: 50px;
     transform: translateX(-50%);
@@ -20,6 +20,7 @@ body {
     border-radius: 50% 50% 0 0;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     z-index: 10;
+    pointer-events: none; /* 防止挡住点击 */
 }
 
 /* 3. 人物帽子 */
@@ -37,7 +38,7 @@ body {
 
 /* 4. 特殊文字（左侧破碎效果，匹配原图） */
 .special-text {
-    position: absolute;
+    position: fixed; /* 改为 fixed，固定位置 */
     left: 20%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -46,6 +47,7 @@ body {
     text-shadow: 0 0 5px rgba(0, 243, 255, 0.7);
     pointer-events: none;
     z-index: 20;
+    width: 100%; /* 防止溢出 */
 }
 
 .special-text .text {
@@ -69,6 +71,8 @@ body {
     text-shadow: 0 0 3px rgba(255, 0, 60, 0.7);
     pointer-events: none;
     opacity: 0.7;
+    /* 确保文字不会超出屏幕导致奇怪滚动 */
+    white-space: nowrap; 
 }
 
 /* 6. 时钟样式（匹配原图右上角） */
@@ -100,20 +104,39 @@ body {
 
 /* 7. 故障干扰效果 */
 .glitch-bar {
-    position: absolute;
+    position: fixed; /* 改为 fixed */
     width: 100%;
     height: 5px;
     background: rgba(255, 0, 60, 0.3);
     opacity: 0;
     z-index: 5;
+    pointer-events: none;
 }
 
-/* 8. 内容区域遮罩（确保文字可读） */
-#page-header, #content-wrap, .post-card, .sidebar {
-    background: rgba(10, 10, 15, 0.75) !important;
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(255, 0, 60, 0.2);
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+/* 8. 内容区域遮罩（关键修复：加深背景，提高可读性） */
+#page-header, 
+#content-wrap, 
+.post-card, 
+.sidebar,
+.article-container {
+    /* 背景更黑，透明度降低，确保文字清晰 */
+    background: rgba(10, 10, 15, 0.92) !important;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(0, 243, 255, 0.3) !important;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    /* 确保层级在背景之上 */
+    z-index: 100 !important; 
+    color: #e0e0e0 !important; /* 强制文字颜色 */
+}
+
+/* 特别针对文章标题和正文的颜色修复 */
+.post-card .article-title, 
+.post-card .article-content, 
+#content-wrap h1, 
+#content-wrap h2, 
+#content-wrap p {
+    color: #fff !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
 }
 
 /* 9. 文字故障动画 */
@@ -129,4 +152,5 @@ body {
 @media screen and (max-width: 768px) {
     #cyber-clock { top: 15px; right: 15px; }
     #cyber-clock .time { font-size: 1.5rem; }
+    .special-text { font-size: 2rem; left: 10%; }
 }

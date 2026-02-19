@@ -1,0 +1,132 @@
+/* 1. 完全匹配原图的深色背景 */
+body {
+    margin: 0;
+    overflow: hidden;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    font-family: 'Courier New', monospace;
+    color: #fff;
+    height: 100vh;
+}
+
+/* 2. 人物剪影（完全匹配原图姿态） */
+.character {
+    position: absolute;
+    left: 50%;
+    bottom: 50px;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 200px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 50% 50% 0 0;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}
+
+/* 3. 人物帽子 */
+.character::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 30px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 50%;
+}
+
+/* 4. 特殊文字（左侧破碎效果，匹配原图） */
+.special-text {
+    position: absolute;
+    left: 20%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    color: #00f3ff;
+    text-shadow: 0 0 5px rgba(0, 243, 255, 0.7);
+    pointer-events: none;
+    z-index: 20;
+}
+
+.special-text .text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: #00f3ff;
+}
+
+.special-text .text:nth-child(2) {
+    color: rgba(255, 0, 60, 0.5);
+    left: 1px;
+    top: 1px;
+}
+
+/* 5. 普通文字（红/青色，随机位置） */
+.text {
+    position: absolute;
+    font-size: 1.5rem;
+    color: #ff003c;
+    text-shadow: 0 0 3px rgba(255, 0, 60, 0.7);
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+/* 6. 时钟样式（匹配原图右上角） */
+#cyber-clock {
+    position: fixed;
+    top: 30px;
+    right: 40px;
+    z-index: 9999;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: right;
+    pointer-events: none;
+    text-shadow: 0 0 10px rgba(255, 0, 60, 0.8);
+}
+
+#cyber-clock .time {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #fff;
+    letter-spacing: 3px;
+    animation: glitch-text 3s infinite;
+}
+
+#cyber-clock .date {
+    font-size: 1rem;
+    color: #00f3ff;
+    margin-top: 5px;
+    opacity: 0.8;
+}
+
+/* 7. 故障干扰效果 */
+.glitch-bar {
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    background: rgba(255, 0, 60, 0.3);
+    opacity: 0;
+    z-index: 5;
+}
+
+/* 8. 内容区域遮罩（确保文字可读） */
+#page-header, #content-wrap, .post-card, .sidebar {
+    background: rgba(10, 10, 15, 0.75) !important;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 0, 60, 0.2);
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+/* 9. 文字故障动画 */
+@keyframes glitch-text {
+    0%, 100% { transform: translate(0); }
+    90% { transform: translate(0); }
+    92% { transform: translate(-2px, 2px); }
+    94% { transform: translate(2px, -2px); }
+    96% { transform: translate(0); }
+}
+
+/* 10. 移动端适配 */
+@media screen and (max-width: 768px) {
+    #cyber-clock { top: 15px; right: 15px; }
+    #cyber-clock .time { font-size: 1.5rem; }
+}
